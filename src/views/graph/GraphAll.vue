@@ -1,168 +1,11 @@
 <template>
-  <div class="about">
-    <el-card class="box-card">
-      <div>
-        <el-row>
-          <el-col :span="4">厂商</el-col>
-          <el-col :span="4">型号</el-col>
-          <el-col :span="4">漏洞类型</el-col>
-          <el-col :span="4">参考链接</el-col>
-          <el-col :span="4">其他</el-col>
-          <el-col :span="4">其他</el-col>
-        </el-row>
-      </div>
-    </el-card>
-    <div class="menu-tabs">
-      <el-tabs v-model="activeName" type="card">
-        <el-tab-pane label="用户管理" name="first">
-          <el-card class="box-card-content">
-            <v-chart :options="getOptions()" />
-          </el-card>
-        </el-tab-pane>
-        <el-tab-pane label="配置管理" name="second">
-          <graph-all />
-        </el-tab-pane>
-        <el-tab-pane label="角色管理" name="third">
-          222222
-          <!--<graph-node></graph-node>-->
-        </el-tab-pane>
-        <el-tab-pane label="定时任务补偿" name="fourth">
-          <el-card class="box-card-content">
-            <div v-for="o in 4" :key="o" class="text item">
-              {{'定时任务补偿 ' + o }}
-            </div>
-          </el-card>
-        </el-tab-pane>
-      </el-tabs>
+    <div class="graph-all">
+        <v-chart :options="getOptions()" />
     </div>
-
-  </div>
 </template>
 
 <script>
-  import GraphAll from './graph/GraphAll'
-  // import GraphNode from './graph/GraphNode'
-    let data = {
-        nodes: [{
-            name: '操作系统集团',
-            category: 0
-        }, {
-            name: '浏览器有限公司',
-            category: 0
-        }, {
-            name: 'HTML科技',
-            category: 0
-        }, {
-            name: 'JavaScript科技',
-            category: 0
-        }, {
-            name: 'CSS科技',
-            category: 0
-        }, {
-            name: 'Chrome',
-            category: 1
-        }, {
-            name: 'IE',
-            category: 1
-        }, {
-            name: 'Firefox',
-            category: 1
-        }, {
-            name: 'Safari',
-            category: 1
-        }],
-
-        links: [{
-            source: '浏览器有限公司',
-            target: '操作系统集团',
-            name: '参股'
-        }, {
-            source: 'HTML科技',
-            target: '浏览器有限公司',
-            name: '参股'
-        }, {
-            source: 'CSS科技',
-            target: '浏览器有限公司',
-            name: '参股'
-        }, {
-            source: 'JavaScript科技',
-            target: '浏览器有限公司',
-            name: '参股'
-        }, {
-            source: 'Chrome',
-            target: '浏览器有限公司',
-            name: '董事'
-        }, {
-            source: 'IE',
-            target: '浏览器有限公司',
-            name: '董事'
-        }, {
-            source: 'Firefox',
-            target: '浏览器有限公司',
-            name: '董事'
-        }, {
-            source: 'Safari',
-            target: '浏览器有限公司',
-            name: '董事'
-        }, {
-            source: 'Chrome',
-            target: 'JavaScript科技',
-            name: '法人'
-        }]
-    }
-
-    const color1 = '#006acc';
-    const color2 = '#ff7d18';
-    const color3 = '#10a050';
-
-    data.nodes.forEach(node => {
-        if (node.category === 0) {
-            node.symbolSize = 30;
-            node.itemStyle = {
-                color: color1
-            };
-        } else if (node.category === 1) {
-            node.itemStyle = {
-                color: color2
-            };
-        }
-    });
-
-    data.links.forEach(link => {
-        link.label = {
-            align: 'center',
-            fontSize: 12
-        };
-
-        if (link.name === '参股') {
-            link.lineStyle = {
-                color: color2
-            }
-        } else if (link.name === '董事') {
-            link.lineStyle = {
-                color: color1
-            }
-        } else if (link.name === '法人') {
-            link.lineStyle = {
-                color: color3
-            }
-        }
-    });
-
-    let categories = [{
-        name: '公司',
-        itemStyle: {
-            color: color1
-        }
-    },
-        {
-            name: '董事',
-            itemStyle: {
-                color: color2
-            }
-        }]
-
-    var nodes = [{
+    let nodes = [{
         x: 500,
         y: 1000,
         nodeName: '应用',
@@ -212,7 +55,7 @@
             svgPath: 'M887.552 546.10944c-28.16 0-54.21056 8.576-75.97056 23.168l-140.22144-153.6a237.55264 237.55264 0 0 0 79.54944-176.768C750.7712 107.02336 643.8912 0.14336 512 0 380.1088 0.14336 273.2288 107.02336 273.09056 238.91456c0 67.84 28.672 128.768 74.24 172.35456L203.52 564.41856a134.60992 134.60992 0 0 0-67.01056-18.304C61.12256 546.18112 0.03584 607.29856 0 682.68544 0 757.95456 61.25056 819.2 136.50944 819.2c75.38688-0.03584 136.50432-61.12256 136.576-136.51456 0-26.112-7.68-50.176-20.48-70.97344l151.10656-161.024a234.73152 234.73152 0 0 0 74.17856 23.68v281.41056a136.448 136.448 0 0 0-102.4 131.712c0 75.264 61.184 136.50944 136.50944 136.50944 75.3664-0.07168 136.44288-61.14816 136.50944-136.50944 0-63.42144-43.648-116.41856-102.4-131.712V474.368c24.00256-3.456 46.78144-10.17344 67.84-20.29056l152.38656 166.85056c-9.53856 18.688-15.36 39.424-15.36 61.75744 0 75.264 61.184 136.51456 136.576 136.51456 75.41248-2.82624 134.25152-66.2528 131.42528-141.66528-2.68288-71.44448-59.9808-128.7424-131.42528-131.42528z m-751.03744 204.8c-37.69856 1.13664-69.17632-28.50304-70.31808-66.19648S94.69952 615.53664 132.39296 614.4c1.39264-0.04096 2.7904-0.04096 4.18304 0 37.71392 0.01536 68.2752 30.60224 68.25984 68.31616-0.01536 37.69344-30.5664 68.24448-68.25984 68.25984l-0.06144-0.06656z m204.8-512c0.1024-94.21312 76.47232-170.55232 170.68544-170.61888 94.21312 0.07168 170.58304 76.41088 170.68544 170.624C682.61888 333.15328 606.23872 409.52832 512 409.6c-94.23872-0.07168-170.61888-76.44672-170.68544-170.69056z m238.976 648.576c-0.01536 37.71392-30.60736 68.2752-68.32128 68.25472-37.71392-0.01536-68.2752-30.60736-68.25472-68.32128 0.01536-37.71392 30.60224-68.2752 68.31616-68.25984 37.69344 0.01536 68.24448 30.5664 68.25984 68.25984v0.06656z m307.2-136.576c-37.67296-0.03584-68.21888-30.55104-68.29056-68.224 0-37.71392 30.57152-68.28544 68.29056-68.28544 37.71392 0 68.29056 30.57152 68.28544 68.29056 0 37.68832-30.53568 68.25472-68.224 68.28544l-0.06144-0.06656z',
         },
     ]
-    var charts = {
+    let charts = {
         nodes: [],
         linesData: [{
             coords: [
@@ -274,7 +117,7 @@
             svgPath,
             symbolSize
         } = nodes[j];
-        var node = {
+        let node = {
             nodeName,
             value: [x, y],
             symbolSize: symbolSize || 50,
@@ -285,129 +128,69 @@
         }
         charts.nodes.push(node)
     }
-  export default {
-      name: 'About',
-      data() {
-          return {
-              activeName: 'first'
-          }
-      },
-      components: {
-          GraphAll
-          // GraphNode
-      },
-      methods: {
-          getOptions() {
-              return {
-                  title: {
-                      text: '知识图谱',
-                  },
-                  legend: [{
-                      // selectedMode: 'single',
-                      data: categories.map(x => x.name),
-                      // icon: 'circle'
-                  }],
-                  series: [{
-                      type: 'graph',
-                      layout: 'force',
-                      symbolSize: 18,
-                      draggable: true,
-                      roam: true,
-                      focusNodeAdjacency: true,
-                      categories: categories,
-                      edgeSymbol: ['', 'arrow'],
-                      // edgeSymbolSize: [80, 10],
-                      edgeLabel: {
-                          normal: {
-                              show: true,
-                              textStyle: {
-                                  fontSize: 20
-                              },
-                              formatter(x) {
-                                  return x.data.name;
-                              }
-                          }
-                      },
-                      label: {
-                          show: true
-                      },
-                      force: {
-                          repulsion: 2000,
-                          edgeLength: 120
-                      },
-                      data: data.nodes,
-                      links: data.links
-                  }]
-              }
-          },
-          getOptionssec() {
-              return {
-                  backgroundColor: "#0B1321",
-                  xAxis: {
-                      min: 0,
-                      max: 1000,
-                      show: false,
-                      type: 'value'
-                  },
-                  yAxis: {
-                      min: 0,
-                      max: 1000,
-                      show: false,
-                      type: 'value'
-                  },
-                  series: [{
-                      type: 'graph',
-                      coordinateSystem: 'cartesian2d',
-                      label: {
-                          show: true,
-                          position: 'bottom',
-                          color: 'orange',
-                          formatter: function(item) {
-                              return item.data.nodeName
-                          }
-                      },
-                      data: charts.nodes,
-                  }, {
-                      type: 'lines',
-                      polyline: true,
-                      coordinateSystem: 'cartesian2d',
-                      lineStyle: {
-                          type: 'dashed',
-                          width: 2,
-                          color: '#175064',
-                          curveness: 0.3
+    export default {
+        name: "GraphAll",
+        data() {
+            return {
 
-                      },
-                      effect: {
-                          show: true,
-                          trailLength: 0.1,
-                          symbol: 'arrow',
-                          color: 'orange',
-                          symbolSize: 8
-                      },
-                      data: charts.linesData
-                  }]
-              }
-          }
-      }
-  }
+            }
+        },
+        methods: {
+            getOptions() {
+                return {
+                    backgroundColor: "#0B1321",
+                    xAxis: {
+                        min: 0,
+                        max: 1000,
+                        show: false,
+                        type: 'value'
+                    },
+                    yAxis: {
+                        min: 0,
+                        max: 1000,
+                        show: false,
+                        type: 'value'
+                    },
+                    series: [{
+                        type: 'graph',
+                        coordinateSystem: 'cartesian2d',
+                        label: {
+                            show: true,
+                            position: 'bottom',
+                            color: 'orange',
+                            formatter: function(item) {
+                                return item.data.nodeName
+                            }
+                        },
+                        data: charts.nodes,
+                    }, {
+                        type: 'lines',
+                        polyline: true,
+                        coordinateSystem: 'cartesian2d',
+                        lineStyle: {
+                            type: 'dashed',
+                            width: 2,
+                            color: '#175064',
+                            curveness: 0.3
+
+                        },
+                        effect: {
+                            show: true,
+                            trailLength: 0.1,
+                            symbol: 'arrow',
+                            color: 'orange',
+                            symbolSize: 8
+                        },
+                        data: charts.linesData
+                    }]
+                }
+            }
+        }
+    }
 </script>
 
-<style lang="sass" scoped>
-  .about
-    height: 200px
-    padding: 0px 0 20px 0
-    .box-card
-      width: 100%
-      height: 100px
-      margin-top: 10px
-    .menu-tabs
-      text-align: center
-      .box-card-content
+<style scoped lang="sass">
+    .graph-all
+        width: 1400px
         height: 650px
-        width: 100%
-        .el-card__body
-          height: 650px
-          .echarts
-            height: 650px
 </style>
