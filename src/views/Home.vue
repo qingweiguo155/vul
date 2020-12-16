@@ -35,6 +35,9 @@
                 sortable
                 width="180"
                 column-key="date">
+                <template slot-scope="scope">
+                  <el-button @click="handleClick(scope.row.date)" type="text" size="small">{{scope.row.date}}</el-button>
+                </template>
               </el-table-column>
               <el-table-column
                 prop="name"
@@ -137,6 +140,9 @@ export default {
     methods: {
         currentChange(val) {
             this.currentPage = val
+        },
+        handleClick(id) {
+            this.$router.push(`/vuldetails/${id}`)
         }
     }
 }
