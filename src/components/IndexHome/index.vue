@@ -7,7 +7,7 @@
             <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item @click.native="changeValueCommand(item)" v-for="item in dropdownList" :key="item.value">{{item.label}}</el-dropdown-item>
             </el-dropdown-menu>
-        </el-dropdown>¬
+        </el-dropdown>
     </div>
 </template>
 

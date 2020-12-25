@@ -3,11 +3,21 @@
     <el-card class="box-card">
       <div>
         <el-row>
-          <el-col :span="4">厂商</el-col>
-          <el-col :span="4">型号</el-col>
-          <el-col :span="4">漏洞类型</el-col>
-          <el-col :span="4">参考链接</el-col>
-          <el-col :span="4">其他</el-col>
+          <el-col :span="4">厂商: 网御星云</el-col>
+          <el-col :span="4">型号: SQL注入漏</el-col>
+          <el-col :span="4">漏洞类型: 跨站脚本</el-col>
+          <el-col :span="4">参考链接: nvd.nist.gov</el-col>
+          <el-col :span="8">CVE编号: CVE-2020-17530</el-col>
+
+        </el-row>
+      </div>
+      <div class="vul-details-card">
+        <el-row>
+          <el-col :span="4">漏洞来源: Matthias Kaiser</el-col>
+          <el-col :span="4">危害等级: 超危</el-col>
+          <el-col :span="4">威胁类型: 远程</el-col>
+          <el-col :span="4">发布时间: 2020-12-21</el-col>
+          <el-col :span="4">更新时间: 2020-12-22</el-col>
           <el-col :span="4">其他</el-col>
         </el-row>
       </div>
@@ -27,11 +37,7 @@
           <!--<graph-node></graph-node>-->
         </el-tab-pane>
         <el-tab-pane label="定时任务补偿" name="fourth">
-          <el-card class="box-card-content">
-            <div v-for="o in 4" :key="o" class="text item">
-              {{'定时任务补偿 ' + o }}
-            </div>
-          </el-card>
+          <d3-graph />
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -41,6 +47,7 @@
 
 <script>
   import GraphAll from './graph/GraphAll'
+  import D3Graph from './graph/D3'
   // import GraphNode from './graph/GraphNode'
     let data = {
         nodes: [{
@@ -293,7 +300,8 @@
           }
       },
       components: {
-          GraphAll
+          GraphAll,
+          D3Graph
           // GraphNode
       },
       methods: {
@@ -400,7 +408,8 @@
     .box-card
       width: 100%
       height: 100px
-      margin-top: 10px
+      .vul-details-card
+        margin-top: 25px
     .menu-tabs
       text-align: center
       .box-card-content
