@@ -20,8 +20,14 @@
       <el-main>
         <div class="main_operator">
          <div class="operator" >
-           <div class="filter_type"></div>
-           <div class="search_keywords"></div>
+           <div class="filter_type">
+             <drop-down></drop-down>
+           </div>
+           <div class="search_keywords">
+             <el-input v-model="keyWord" placeholder="请输入搜索内容" clearable @change="getvulList">
+               <el-button slot="append" icon="el-icon-search" @click="getvulList"></el-button>
+             </el-input>
+           </div>
          </div>
           <div class="main_table">
             <el-table
@@ -64,10 +70,12 @@
             <el-pagination
               background
               :current-page="currentPage"
-              page-size="10"
-              layout="prev, pager, next"
+              @size-change="handleSizeChange"
+              :page-sizes="[100, 200, 300, 400]"
+              :page-size="100"
+              layout="total, sizes, prev, pager, next, jumper"
               @current-change="currentChange"
-              :total="100">
+              :total="400">
             </el-pagination>
           </div>
         </div>
@@ -78,11 +86,13 @@
 </template>
 
 <script>
+  import DropDown from '../components/IndexHome/'
 /*disable-eslint*/
 export default {
     name: 'Home',
     data() {
         return {
+            keyWord: '',
             currentPage: 1,
             tableData: [{
                 date: '2016-05-02',
@@ -137,12 +147,24 @@ export default {
             }]
         }
     },
+    components: {
+        DropDown
+    },
     methods: {
         currentChange(val) {
             this.currentPage = val
         },
         handleClick(id) {
             this.$router.push(`/vuldetails/${id}`)
+        },
+        handleSizeChange() {
+
+        },
+        handleCurrentChange() {
+
+        },
+        getvulList() {
+            console.log(this.keyWord)
         }
     }
 }
@@ -169,8 +191,12 @@ export default {
         height: 90%
         .operator
           height: $myHeight * 2
+          display: flex
         .main-pagination
           margin: 20px auto 0
+        .search_keywords
+          width: 60%
+          margin-left: 5%
 
 
 </style>
