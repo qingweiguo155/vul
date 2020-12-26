@@ -1,6 +1,6 @@
 <template>
-    <div class="graph-all">
-        <v-chart :options="getOptions()" />
+    <div id="graph" style="width: 1400px;height:650px;">
+       
     </div>
 </template>
 
@@ -136,8 +136,9 @@
             }
         },
         methods: {
-            getOptions() {
-                return {
+            setOption() {
+                let graph = this.$echarts.init(document.getElementById('graph'))
+                graph.setOption({
                     backgroundColor: "#0B1321",
                     xAxis: {
                         min: 0,
@@ -183,8 +184,61 @@
                         },
                         data: charts.linesData
                     }]
-                }
+                })
+               
             }
+            // getOptions() {
+            //     return {
+            //         backgroundColor: "#0B1321",
+            //         xAxis: {
+            //             min: 0,
+            //             max: 1000,
+            //             show: false,
+            //             type: 'value'
+            //         },
+            //         yAxis: {
+            //             min: 0,
+            //             max: 1000,
+            //             show: false,
+            //             type: 'value'
+            //         },
+            //         series: [{
+            //             type: 'graph',
+            //             coordinateSystem: 'cartesian2d',
+            //             label: {
+            //                 show: true,
+            //                 position: 'bottom',
+            //                 color: 'orange',
+            //                 formatter: function(item) {
+            //                     return item.data.nodeName
+            //                 }
+            //             },
+            //             data: charts.nodes,
+            //         }, {
+            //             type: 'lines',
+            //             polyline: true,
+            //             coordinateSystem: 'cartesian2d',
+            //             lineStyle: {
+            //                 type: 'dashed',
+            //                 width: 2,
+            //                 color: '#175064',
+            //                 curveness: 0.3
+
+            //             },
+            //             effect: {
+            //                 show: true,
+            //                 trailLength: 0.1,
+            //                 symbol: 'arrow',
+            //                 color: 'orange',
+            //                 symbolSize: 8
+            //             },
+            //             data: charts.linesData
+            //         }]
+            //     }
+            // }
+        },
+        mounted() {
+            this.setOption()
         }
     }
 </script>
