@@ -1,7 +1,8 @@
 <template>
-    <div class="graph-node">
-        <v-chart :options="getOptions()" />
-    </div>
+    <!--<div class="graph-node">-->
+        <!--<v-chart :options="getOptions()" />-->
+    <!--</div>-->
+    <div id="graphNode"></div>
 </template>
 
 <script>
@@ -24,14 +25,9 @@
             return {};
         },
         methods: {
-            getOptions() {
-                return {
-                    "title":{
-                        "text":"Les Miserables",
-                        "subtext":"Default layout",
-                        "top":"bottom",
-                        "left":"right"
-                    },
+            setOptionsNode() {
+                let graphNode = this.$echarts.init(document.getElementById('graphNode'))
+                graphNode.setOption({
                     "tooltip":{
 
                     },
@@ -57,7 +53,7 @@
                     },
                     "series":[
                         {
-                            "name":"Les Miserables",
+                            "name":"",
                             "type":"graph",
                             "symbol": svg,
                             "layout":"none",
@@ -4305,14 +4301,20 @@
                             }
                         }
                     ]
-                }
+                })
             }
+        },
+        mounted() {
+            this.setOptionsNode()
         }
     }
 </script>
 
 <style scoped lang="sass">
-    .graph-node
+    #graphNode
         width: 1400px
-        height: 650px
+        height: 750px
+        border: 1px solid #ccc
+        margin: 0 auto
+
 </style>

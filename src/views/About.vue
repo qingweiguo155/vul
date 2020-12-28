@@ -25,7 +25,7 @@
     <div class="menu-tabs">
       <el-tabs v-model="activeName" type="card">
         <el-tab-pane label="用户管理" name="first">
-          <el-card class="box-card-content">
+          <el-card class="box-card-content" shadow="never">
             <v-chart :options="getOptions()" />
           </el-card>
         </el-tab-pane>
@@ -33,8 +33,7 @@
           <graph-all />
         </el-tab-pane>
         <el-tab-pane label="角色管理" name="third">
-          222222
-          <!--<graph-node></graph-node>-->
+          <graph-node />
         </el-tab-pane>
         <el-tab-pane label="定时任务补偿" name="fourth">
           <d3-graph />
@@ -48,7 +47,7 @@
 <script>
   import GraphAll from './graph/GraphAll'
   import D3Graph from './graph/D3'
-  // import GraphNode from './graph/GraphNode'
+  import GraphNode from './graph/GraphNode'
     let data = {
         nodes: [{
             name: '操作系统集团',
@@ -301,8 +300,8 @@
       },
       components: {
           GraphAll,
-          D3Graph
-          // GraphNode
+          D3Graph,
+          GraphNode
       },
       methods: {
           getOptions() {
@@ -403,20 +402,25 @@
 
 <style lang="sass" scoped>
   .about
-    height: 200px
-    padding: 0px 0 20px 0
+    height: 100%
     .box-card
       width: 100%
-      height: 100px
+      height: 15%
       .vul-details-card
         margin-top: 25px
     .menu-tabs
       text-align: center
-      .box-card-content
-        height: 650px
-        width: 100%
-        .el-card__body
-          height: 650px
-          .echarts
-            height: 650px
+      margin-top: 10px
+      height: 85%
+      .el-tabs__content
+        width: 1400px
+        margin: 0 auto
+        .box-card-content
+          height: 750px
+          width: 1400px
+          margin: 0 auto
+          .el-card__body
+            height: 100%
+            .echarts
+              min-height: 750px
 </style>

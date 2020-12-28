@@ -1,7 +1,5 @@
 <template>
-    <div id="graph" style="width: 1400px;height:650px;">
-       
-    </div>
+    <div id="graph"></div>
 </template>
 
 <script>
@@ -139,7 +137,7 @@
             setOption() {
                 let graph = this.$echarts.init(document.getElementById('graph'))
                 graph.setOption({
-                    backgroundColor: "#0B1321",
+                    backgroundColor: "#fff",
                     xAxis: {
                         min: 0,
                         max: 1000,
@@ -244,7 +242,9 @@
 </script>
 
 <style scoped lang="sass">
-    .graph-all
+    #graph
         width: 1400px
-        height: 650px
+        height: 750px
+        border: 1px solid #ccc
+        margin: 0 auto
 </style>

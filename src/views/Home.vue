@@ -16,7 +16,7 @@
     <!--</div>-->
     <!--<div class="copy_right"></div>-->
     <el-container>
-      <el-header>Header</el-header>
+      <el-header>漏洞库</el-header>
       <el-main>
         <div class="main_operator">
          <div class="operator" >
@@ -37,7 +37,7 @@
               style="width: 100%">
               <el-table-column
                 prop="date"
-                label="日期"
+                label="提交日期"
                 sortable
                 width="180"
                 column-key="date">
@@ -47,21 +47,29 @@
               </el-table-column>
               <el-table-column
                 prop="name"
-                label="姓名"
+                label="漏洞等级"
                 width="180">
               </el-table-column>
               <el-table-column
+                      prop="type"
+                      label="漏洞类型"
+                      width="180">
+              </el-table-column>
+              <el-table-column
                 prop="address"
-                label="地址">
+                show-overflow-tooltip
+                label="漏洞名称">
               </el-table-column>
               <el-table-column
                 prop="tag"
-                label="标签"
-                width="100">
+                label="漏洞状态"
+                width="200">
                 <template slot-scope="scope">
                   <el-tag
-                    :type="scope.row.tag === '家' ? 'primary' : 'success'"
+                    :type="scope.row.tag === '漏洞细节' ? 'primary' : 'success'"
                     disable-transitions>{{scope.row.tag}}</el-tag>
+                  &nbsp;&nbsp;
+                  <el-tag type="primary" v-if="scope.row.tags">{{scope.row.tags}}</el-tag>
                 </template>
               </el-table-column>
             </el-table>
@@ -95,55 +103,66 @@ export default {
             keyWord: '',
             currentPage: 1,
             tableData: [{
-                date: '2016-05-02',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄',
-                tag: '家'
+                date: '2020-05-02',
+                name: '一般',
+                type: 'cve',
+                address: 'Openbsd Opensmtpd 安全漏洞',
+                tag: '漏洞细节'
             }, {
-                date: '2016-05-04',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1517 弄',
-                tag: '公司'
+                date: '2020-05-04',
+                name: '一般',
+                type: 'cwe',
+                address: 'Samsung 多款产品安全漏洞',
+                tag: '漏洞脚本'
             }, {
-                date: '2016-05-01',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1519 弄',
-                tag: '家'
+                date: '2020-05-05',
+                name: '严重',
+                type: 'cve',
+                address: 'Marital Online Matrimonial Project Marital Online Matrimonial Project 代码问题漏洞',
+                tag: '漏洞载体'
             }, {
-                date: '2016-05-01',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1519 弄',
-                tag: '家'
+                date: '2020-05-05',
+                name: '严重',
+                type: 'cve',
+                address: 'Urve 信息泄露漏洞',
+                tag: '漏洞细节'
             }, {
-                date: '2016-05-01',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1519 弄',
-                tag: '家'
+                date: '2020-05-06',
+                name: '致命',
+                type: 'cnnvd',
+                address: 'Urve 权限许可和访问控制问题漏洞',
+                tag: '漏洞载体'
             }, {
-                date: '2016-05-01',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1519 弄',
-                tag: '家'
+                date: '2020-06-06',
+                name: '一般',
+                type: 'exb',
+                address: 'WooCommerce 权限许可和访问控制问题漏洞',
+                tag: '漏洞载体',
+                tags: '漏洞利用脚本'
             }, {
-                date: '2016-05-01',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1519 弄',
-                tag: '家'
+                date: '2020-06-08',
+                name: '严重',
+                type: 'rabit7',
+                address: 'WooCommerce 权限许可和访问控制问题漏洞',
+                tag: '漏洞细节'
             }, {
-                date: '2016-05-01',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1519 弄',
-                tag: '家'
+                date: '2020-06-10',
+                name: '严重',
+                type: 'rabit7',
+                address: 'FasterXML jackson-databind 输入验证错误漏洞',
+                tag: '漏洞细节'
             }, {
-                date: '2016-05-01',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1519 弄',
-                tag: '家'
+                date: '2020-07-01',
+                name: '严重',
+                type: 'cve',
+                address: 'FasterXML jackson-databind 输入验证错误漏洞',
+                tag: '漏洞细节'
             }, {
-                date: '2016-05-03',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1516 弄',
-                tag: '公司'
+                date: '2020-12-03',
+                name: '严重',
+                type: 'cwe',
+                address: 'FasterXML jackson-databind 输入验证错误漏洞',
+                tag: '漏洞载体'
             }]
         }
     },

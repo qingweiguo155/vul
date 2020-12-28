@@ -1,6 +1,6 @@
 <template>
     <div>
-        <svg width="1400" height="600" class="container-border"></svg>
+        <svg width="1400" height="750" class="container-border"></svg>
     </div>
 </template>
 <script>
