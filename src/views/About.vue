@@ -24,19 +24,59 @@
     </el-card>
     <div class="menu-tabs">
       <el-tabs v-model="activeName" type="card">
-        <el-tab-pane label="用户管理" name="first">
+        <el-tab-pane label="CVE" name="first">
           <el-card class="box-card-content" shadow="never">
             <v-chart :options="getOptions()" />
           </el-card>
         </el-tab-pane>
-        <el-tab-pane label="配置管理" name="second">
+        <el-tab-pane label="CWE" name="second">
           <graph-all />
         </el-tab-pane>
-        <el-tab-pane label="角色管理" name="third">
+        <el-tab-pane label="CNNVD" name="third">
           <graph-node />
         </el-tab-pane>
-        <el-tab-pane label="定时任务补偿" name="fourth">
-          <d3-graph />
+        <el-tab-pane label="可利用脚本" name="fourth">
+          <!--<d3-graph />-->
+          <pre v-highlightjs>
+            <code class="bash">
+              ## https://sploitus.com/exploit?id=EDB-ID:49205
+              # Exploit Title: Kite 1.2020.1119.0 - 'KiteService' Unquoted Service Path
+              # Discovery by: Ismael Nava
+              # Discovery Date: 05-12-2020
+              # Vendor Homepage: https://www.kite.com/
+              # Software Links : https://www.kite.com/download/
+              # Tested Version: 1.2020.1119.0
+              # Vulnerability Type: Unquoted Service Path
+              # Tested on OS: Windows 10 64 bits
+              # Software link: https://www.misp-project.org/download/
+              # Version: 2.4.90 - 2.4.99
+              # Tested on: 2.4.97
+              # CVE: CVE-2018-19908
+              # Use this payload as stix filename
+              # Step to discover Unquoted Service Path:
+
+            C:\>wmic service get name, displayname, pathname, startmode | findstr /i "Auto" | findstr /i /v "C:\Windows\\"              |findstr /i /v """
+            KiteService	KiteService	C:\Program Files\Kite\KiteService.exe	Auto
+
+            C:\>sc qc "KiteService"
+            [SC] QueryServiceConfig CORRECTO
+
+            def main():
+                SQLRequest = "UPDATE users SET role_id=1 WHERE id = 2"
+                print(generate_exploit(SQLRequest))
+
+            NOMBRE_SERVICIO: KiteService
+                  TIPO               : 10  WIN32_OWN_PROCESS
+                  TIPO_INICIO        : 2   AUTO_START
+                  CONTROL_ERROR      : 0   IGNORE
+                  NOMBRE_RUTA_BINARIO: C:\Program Files\Kite\KiteService.exe
+                  GRUPO_ORDEN_CARGA  :
+                  ETIQUETA           : 0
+                  NOMBRE_MOSTRAR     : KiteService
+                  DEPENDENCIAS       :
+                  NOMBRE_INICIO_SERVICIO: LocalSystem
+            </code>
+          </pre>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -46,74 +86,74 @@
 
 <script>
   import GraphAll from './graph/GraphAll'
-  import D3Graph from './graph/D3'
+  // import D3Graph from './graph/D3'
   import GraphNode from './graph/GraphNode'
     let data = {
         nodes: [{
-            name: '操作系统集团',
+            name: '资产型号',
             category: 0
         }, {
-            name: '浏览器有限公司',
+            name: '漏洞',
             category: 0
         }, {
-            name: 'HTML科技',
+            name: '厂商',
             category: 0
         }, {
-            name: 'JavaScript科技',
+            name: 'CWE',
             category: 0
         }, {
-            name: 'CSS科技',
+            name: '工具',
             category: 0
         }, {
-            name: 'Chrome',
+            name: 'EXP',
             category: 1
         }, {
-            name: 'IE',
+            name: 'dos',
             category: 1
         }, {
-            name: 'Firefox',
+            name: '资产类型',
             category: 1
         }, {
-            name: 'Safari',
+            name: 'PLC',
             category: 1
         }],
 
         links: [{
-            source: '浏览器有限公司',
-            target: '操作系统集团',
-            name: '参股'
+            source: '漏洞',
+            target: '资产型号',
+            name: '影响对象'
         }, {
-            source: 'HTML科技',
-            target: '浏览器有限公司',
-            name: '参股'
+            source: '资产型号',
+            target: '厂商',
+            name: '属于'
         }, {
-            source: 'CSS科技',
-            target: '浏览器有限公司',
-            name: '参股'
+            source: '资产类型',
+            target: '资产型号',
+            name: '包含'
         }, {
-            source: 'JavaScript科技',
-            target: '浏览器有限公司',
-            name: '参股'
+            source: '资产类型',
+            target: 'PLC',
+            name: '包含'
         }, {
-            source: 'Chrome',
-            target: '浏览器有限公司',
-            name: '董事'
+            source: '漏洞',
+            target: 'CWE',
+            name: ''
         }, {
-            source: 'IE',
-            target: '浏览器有限公司',
-            name: '董事'
+            source: '漏洞',
+            target: '工具',
+            name: '相关工具'
         }, {
-            source: 'Firefox',
-            target: '浏览器有限公司',
-            name: '董事'
+            source: '漏洞',
+            target: 'EXP',
+            name: '相关漏洞'
         }, {
-            source: 'Safari',
-            target: '浏览器有限公司',
-            name: '董事'
+            source: 'EXP',
+            target: 'dos',
+            name: '包含'
         }, {
-            source: 'Chrome',
-            target: 'JavaScript科技',
-            name: '法人'
+            // source: 'Chrome',
+            // target: 'JavaScript科技',
+            // name: '法人'
         }]
     }
 
@@ -300,7 +340,7 @@
       },
       components: {
           GraphAll,
-          D3Graph,
+          // D3Graph,
           GraphNode
       },
       methods: {
@@ -309,11 +349,11 @@
                   title: {
                       text: '知识图谱',
                   },
-                  legend: [{
-                      // selectedMode: 'single',
-                      data: categories.map(x => x.name),
-                      // icon: 'circle'
-                  }],
+                  // legend: [{
+                  //     // selectedMode: 'single',
+                  //     // data: categories.map(x => x.name),
+                  //     // icon: 'circle'
+                  // }],
                   series: [{
                       type: 'graph',
                       layout: 'force',
@@ -409,7 +449,7 @@
       .vul-details-card
         margin-top: 25px
     .menu-tabs
-      text-align: center
+      /*text-align: center*/
       margin-top: 10px
       height: 85%
       .el-tabs__content
