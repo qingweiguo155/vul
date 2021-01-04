@@ -9,9 +9,11 @@ import VueECharts from 'vue-echarts'
 import './style/index.css'
 Vue.config.productionTip = false
 Vue.prototype.$echarts = echarts
-import VueHighlightJS from 'vue-highlightjs'
-import 'highlight.js/styles/atom-one-dark.css'
-Vue.use(VueHighlightJS)
+// import VueHighlightJS from 'vue-highlightjs'
+
+import vueHljs from "vue-hljs";
+import "vue-hljs/dist/vue-hljs.min.css";
+ Vue.use(vueHljs);
 Vue.component('v-chart', VueECharts)
 new Vue({
   router,

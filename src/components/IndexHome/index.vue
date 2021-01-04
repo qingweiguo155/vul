@@ -18,7 +18,7 @@
         name: "index",
         data() {
             return {
-                vulType: '请选择漏洞类型',
+                vulType: 'cve',
                 filterList: [{
                     label: 'cve',
                     value: 1
