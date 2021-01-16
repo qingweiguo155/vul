@@ -7,7 +7,8 @@ import getters from './getters.js'
 Vue.use(Vuex)
 
 const state = {
-  dropdownList: []
+  dropdownList: [],
+    type: ''
 }
 
 

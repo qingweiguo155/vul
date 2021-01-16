@@ -8,19 +8,31 @@
                 <div class="base-info">
                   <div>{{item.label}}</div>
                   <div>{{item.value}}</div>
-                  <!--<a :href="detailsObj.sourceUrl" target="_blank" v-if="item.icon" :class="item.icon" style="text-decoration: none;margin-left: 10px;font-size: 20px;color: #409eff;cursor: pointer">-->
-                  <!--</a>-->
+                  <a :href="detailsObj.sourceUrl" target="_blank" v-if="item.icon" :class="item.icon" style="text-decoration: none;margin-left: 10px;font-size: 20px;color: #409eff;cursor: pointer">
+                </a>
                 </div>
               </div>
-              <div class="base-info">
+              <div class="base-info" v-if="type === 'cve'">
                 <div>漏洞类型</div>
                 <div>
-                  <el-tag v-for="type in detailsObj.vulType" :key="type" size="mini">{{type}}</el-tag>
+                    <el-tag v-for="type in detailsObj.vulType" :key="type" size="mini">{{type}}</el-tag>
                 </div>
-              </div>
+            </div>
+                <div class="base-info" v-if="type === 'exb'">
+                    <div>漏洞类型</div>
+                    <div>
+                        <el-tag size="mini">{{detailsObj.tag}}</el-tag>
+                    </div>
+                </div>
+                <div class="base-info" v-if="type === 'cnnvd'">
+                    <div>漏洞类型</div>
+                    <div>
+                        <el-tag v-for="type in detailsObj.vulType" :key="type" size="mini">{{type}}</el-tag>
+                    </div>
+                </div>
             </el-card>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="12" v-if="type === 'cve'">
             <el-card class="box-card">
               <el-collapse v-model="activeNames" >
                 <el-collapse-item title="描述" name="1">
@@ -63,41 +75,89 @@
               </el-collapse>
             </el-card>
           </el-col>
+
+            <el-col :span="12" v-if="type === 'exb'">
+                <el-card class="box-card">
+                    <el-collapse v-model="activeNames" >
+                        <el-collapse-item title="来源URl" name="1">
+                            <div>{{detailsObj.sourceUrl}}</div>
+                        </el-collapse-item>
+                        <el-collapse-item title="漏洞验证" name="2">
+                            <diz>{{detailsObj.verified}}</diz>
+                        </el-collapse-item>
+                        <el-collapse-item title="App下载链接" name="3">
+                            <div>{{detailsObj.vulnerableApp}}</div>
+                        </el-collapse-item>
+                    </el-collapse>
+                </el-card>
+            </el-col>
+            <el-col :span="12" v-if="type === 'cnnvd'">
+            <el-card class="box-card">
+                <el-collapse v-model="activeNames" >
+                    <el-collapse-item title="描述" name="1">
+                        <div>{{detailsObj.vulDescription}}</div>
+                    </el-collapse-item>
+                    <el-collapse-item title="漏洞公告" name="2">
+                        <diz>{{detailsObj.vulAdvisory}}</diz>
+                    </el-collapse-item>
+                    <el-collapse-item title="参考网址" name="3">
+                        <div v-for="(item, index) in detailsObj.refWebsite" :key="index">
+                            <div class="base-info">
+                                <div>{{item.url}}</div>
+                                <div>{{item.desc}}</div>
+                            </div>
+                        </div>
+                    </el-collapse-item>
+                </el-collapse>
+            </el-card>
+        </el-col>
+            <el-col :span="12" v-if="type === 'metasploit'">
+                <el-card class="box-card">
+                    <el-collapse v-model="activeNames" >
+                        <el-collapse-item title="描述" name="1">
+                            <div>{{detailsObj.description}}</div>
+                        </el-collapse-item>
+                        <el-collapse-item title="作者" name="2">
+                            <div v-for="(item, index) in detailsObj.authors" :key="index">
+                                <div class="base-info">
+                                    <div>{{item}}</div>
+                                </div>
+                            </div>
+                        </el-collapse-item>
+                        <el-collapse-item title="参考链接" name="3">
+                            <div v-for="(item, index) in detailsObj.references" :key="index">
+                                <div class="base-info">
+                                    <div>{{item}}</div>
+                                </div>
+                            </div>
+                        </el-collapse-item>
+                    </el-collapse>
+                </el-card>
+            </el-col>
         </el-row>
     </div>
     <div class="menu-tabs">
       <el-tabs v-model="activeName" type="card">
-        <el-tab-pane label="CVE" name="first">
+        <el-tab-pane label="知识图谱" name="first">
           <el-card class="box-card-content" shadow="never">
-            <v-chart :options="getOptions()" />
+            <!--<v-chart :options="getOptions()" />-->
+              <graph-node :id="$route.params.id"/>
           </el-card>
         </el-tab-pane>
         <el-tab-pane label="可利用脚本" name="fourth">
-          <!--<d3-graph />-->
-          <!--<el-select v-model="defaultCss" placeholder="placeholder" size="mini" @change="handleChangeCss">-->
-            <!--<el-option-->
-                    <!--v-for="item in cssList"-->
-                    <!--:key="item.value"-->
-                    <!--:label="item.label"-->
-                    <!--:value="item.value">-->
-            <!--</el-option>-->
-          <!--</el-select>-->
-          <!--<pre v-highlightjs class=" language-c">-->
-            <!--<code class="language-c">-->
-              <!--#include    <stdio.h>-->
-              <!--#include    <windows.h>-->
+            <div v-highlight v-if="detailsObj.isFrame">
+                <pre>
+                    <code>
+                        <iframe width="1700" height="2000" frameborder="0" :srcdoc="detailsObj.script"></iframe>
+                    </code>
+                </pre>
+            </div>
+            <div v-highlight v-else>
+                <pre>
+                    <code v-html="detailsObj.script"></code>
+                </pre>
+            </div>
 
-                <!--#define     MAXBUF          1000-->
-                <!--#define     RETADR          53-->
-            <!--</code>-->
-          <!--</pre>-->
-          <div v-highlight>
-            <pre>
-              <code class="bash">
-                {{detailsObj.script}}
-              </code>
-            </pre>
-          </div>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -106,11 +166,14 @@
 </template>
 
 <script>
-    import 'highlight.js/styles/atom-one-light.css'
-    import { cveDetails } from '../api'
+    import { mapGetters } from 'vuex'
+    // import 'highlight.js/styles/atom-one-dark.css' //样式文件
+    // import 'highlight.js/styles/atelier-dune-light.css' //样式文件
+    import { cveDetails,exbDetails,cnnvdDetails,metasploitDetailss } from '../api'
     // import GraphAll from './graph/GraphAll'
   // import D3Graph from './graph/D3'
-  // import GraphNode from './graph/GraphNode'
+  import GraphNode from './graph/GraphNode'
+
   export default {
       name: 'About',
       data() {
@@ -122,10 +185,15 @@
               baseInfoList: []
           }
       },
+      computed: {
+          ...mapGetters([
+              'type'
+          ])
+      },
       components: {
           // GraphAll,
           // D3Graph,
-          // GraphNode
+          GraphNode
       },
       methods: {
           // handleChangeCss(val) {
@@ -137,31 +205,123 @@
                       text: '知识图谱',
                   }
               }
-          }
+          },
+          async getDetails() {
+                  if(this.type === 'cve') {
+                        cveDetails(this.$route.params.id).then(data => {
+                          this.detailsObj = data.data
+                      }).then(_ => {
+                          this.baseInfoList.push({
+                              label: 'CVE ID',
+                              value: this.detailsObj['cveId'],
+                              icon: 'el-icon-link'
+                          },{
+                              label: '漏洞评分',
+                              value: this.detailsObj['riskCode']
+                          },{
+                              label: '访问权限',
+                              value: this.detailsObj['gainAccess']
+                          },{
+                              label: '发布时间',
+                              value: this.detailsObj['publishDate'],
+                          },{
+                              label: '更新时间',
+                              value: this.detailsObj['updateDate'],
+                          })
+                      })
+                  }
+                    if (this.type === 'exb') {
+                          exbDetails(this.$route.params.id).then(data => {
+                              this.detailsObj = data.data
+                          }).then(_ => {
+                              this.baseInfoList.push({
+                                  label: 'CVE ID',
+                                  value: this.$route.params.id,
+                                  icon: 'el-icon-link'
+                              },{
+                                  label: '作者',
+                                  value: this.detailsObj['author']
+                              },{
+                                  label: '发布时间',
+                                  value: this.detailsObj['date']
+                              },{
+                                  label: '受影响平台',
+                                  value: this.detailsObj['platform'],
+                              },{
+                                  label: '漏洞标题',
+                                  value: this.detailsObj['title'],
+                              },{
+                                  label: '威胁类型',
+                                  value: this.detailsObj['type'],
+                              })
+                          })
+                      }
+                      if (this.type === 'cnnvd') {
+                          cnnvdDetails(this.$route.params.id).then(data => {
+                              this.detailsObj = data.data
+                          }).then(_ => {
+                              this.baseInfoList.push({
+                                  label: 'CVE ID',
+                                  value: this.$route.params.id,
+                                  icon: 'el-icon-link'
+                              },{
+                                  label: '漏洞名称',
+                                  value: this.detailsObj['vulName']
+                              },{
+                                  label: '漏洞类型',
+                                  value: this.detailsObj['vulType']
+                              },{
+                                  label: '发布时间',
+                                  value: this.detailsObj['date']
+                              },{
+                                  label: '危害级别',
+                                  value: this.detailsObj['riskLevel'],
+                              },{
+                                  label: '修改时间',
+                                  value: this.detailsObj['threatType'],
+                              },{
+                                  label: '威胁类型',
+                                  value: this.detailsObj['updateTime'],
+                              })
+                          })
+                      }
+                      if (this.type === 'metasploit') {
+                          metasploitDetailss(this.$route.params.id).then(data => {
+                              this.detailsObj = data.data
+                          }).then(_ => {
+                              this.baseInfoList.push({
+                                  label: '漏洞名称',
+                                  value: this.detailsObj['name']
+                              },{
+                                  label: '漏洞全名',
+                                  value: this.detailsObj['fullname']
+                              },{
+                                  label: '受影响平台',
+                                  value: this.detailsObj['platform']
+                              },{
+                                  label: '越权',
+                                  value: this.detailsObj['privileged'],
+                              },{
+                                  label: '级别',
+                                  value: this.detailsObj['rank'],
+                              },{
+                                  label: '公开时间',
+                                  value: this.detailsObj['disclosure_date']
+                              },{
+                                  label: '证书',
+                                  value: this.detailsObj['license']
+                              })
+                          })
+                      }
+                      return this.detailsObj;
+              }
       },
-      mounted() {
-          cveDetails(this.$route.params.id).then(data => {
-              this.detailsObj = data.data
-          }).then(_ => {
-              this.baseInfoList.push({
-                  label: 'CVE ID',
-                  value: this.detailsObj['cveId'],
-                  icon: 'el-icon-link'
-              },{
-                  label: '漏洞评分',
-                  value: this.detailsObj['riskCode']
-              },{
-                  label: '访问权限',
-                  value: this.detailsObj['gainAccess']
-              },{
-                  label: '发布时间',
-                  value: this.detailsObj['publishDate'],
-              },{
-                  label: '更新时间',
-                  value: this.detailsObj['updateDate'],
-              })
-          })
-
+       mounted() {
+          // let detailsObj = await this.getDetails();
+          //     console.log(detailsObj)
+              // if (detailsObj.isFrame) {
+                  require('highlight.js/styles/atelier-dune-light.css')
+              // } else require('highlight.js/styles/atom-one-dark.css')
       }
   }
 </script>

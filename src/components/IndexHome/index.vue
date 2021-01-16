@@ -26,7 +26,7 @@
                     label: 'exb',
                     value: 2
                 },{
-                    label: 'rabit7',
+                    label: 'metasploit',
                     value: 3
                 },{
                     label: 'cwe',
@@ -51,6 +51,7 @@
             },
             changeValueCommand({label}) {
                 this.vulType = label
+                this.$emit('vulType', label)
             }
         },
         mounted() {

@@ -6,7 +6,7 @@
         <div class="main_operator">
          <div class="operator" >
            <div class="filter_type">
-             <drop-down />
+             <drop-down @vulType="vulType"/>
            </div>
            <div class="search_keywords">
              <el-input v-model="keyWord" placeholder="请输入搜索内容" clearable @change="getvulList">
@@ -16,34 +16,11 @@
            <div class="filter-modal">
              <el-button type="text" @click="dialogVisible = true">筛选</el-button>
              <el-dialog
-               title=""
+               :title= "type + '筛选'"
                :visible.sync="dialogVisible"
                width="70%"
              >
-               <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                 <el-form-item label="CVE ID" prop="name" style="width: 700px">
-                   <el-input v-model="ruleForm.name" style="width: 700px"></el-input>
-                 </el-form-item>
-                 <el-form-item label="受影响产品" prop="affectedProducts" style="width: 700px">
-                   <el-input v-model="ruleForm.affectedProducts" style="width: 700px"></el-input>
-                 </el-form-item>
-                 <el-form-item label="厂商" prop="manufacturer" style="width: 700px">
-                   <el-input v-model="ruleForm.manufacturer" style="width: 700px"></el-input>
-                 </el-form-item>
-                 <el-form-item label="版本号" prop="version" style="width: 700px">
-                   <el-input v-model="ruleForm.version" style="width: 700px"></el-input>
-                 </el-form-item>
-                 <el-form-item label="漏洞类型" prop="vulType" style="width: 700px">
-                   <el-input v-model="ruleForm.vulType" style="width: 700px"></el-input>
-                 </el-form-item>
-                 <!--<el-form-item label="漏洞评分" prop="cvssScoreFilter" style="width: 800px">-->
-                   <!--<el-slider-->
-                     <!--v-model="ruleForm.cvssScoreFilter"-->
-                     <!--show-input-->
-                     <!--:max="10">-->
-                   <!--</el-slider>-->
-                 <!--</el-form-item>-->
-               </el-form>
+               <filter-modal :type="type"/>
                <span slot="footer" class="dialog-footer">
                  <el-button @click="dialogVisible = false">取 消</el-button>
                  <el-button @click="resetForm('ruleForm')">重置</el-button>
@@ -52,7 +29,7 @@
              </el-dialog>
            </div>
          </div>
-          <div class="main_table">
+          <div class="main_table" v-if="type === 'cve'">
             <el-table
               ref="filterTable"
               size="mini"
@@ -86,6 +63,7 @@
                 label="漏洞名称">
               </el-table-column>
               <el-table-column
+                      v-if="type === 'cve'"
                 prop="tag"
                 label="漏洞状态"
                 width="300">
@@ -98,6 +76,15 @@
                 </template>
               </el-table-column>
             </el-table>
+          </div>
+          <div class="main_table" v-if="type === 'exb'">
+            <exb-list :exbList="exbList"/>
+          </div>
+          <div class="main_table" v-if="type === 'cnnvd'">
+            <cnnvd-list :cnnvdList="cnnvdList"/>
+          </div>
+          <div class="main_table" v-if="type === 'metasploit'">
+            <meta-list :metasploitList="metasploitList"/>
           </div>
           <div class="main-pagination">
             <el-pagination
@@ -120,8 +107,13 @@
 
 <script>
   import DropDown from '../components/IndexHome/'
-  import { cveData } from '../api'
-/*disable-eslint*/
+  import FilterModal from './index/filter'
+  import ExbList from './index/exbList'
+  import CnnvdList from './index/cnnvdList'
+  import MetaList from './index/metasploitList'
+  import { cveData,exbData,cnnvdData,metasploitData  } from '../api'
+  import {  mapActions } from 'vuex'
+  /*disable-eslint*/
 export default {
     name: 'Home',
     data() {
@@ -130,35 +122,30 @@ export default {
             currentPage: 1,
             total: null,
             dialogVisible: false,
+            type: 'cve',
             cveList: [],
-            ruleForm: {
-                name: '',
-                manufacturer: '',
-                affectedProducts: '',
-                vulType: '',
-                version: '',
-                cvssScoreFilter: 0
-            },
-            rules: {
-                name: [
-                    { message: '请输入活动名称', trigger: 'blur' },
-                    { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
-                ],
-                region: [
-                    { message: '请选择活动区域', trigger: 'change' }
-                ]
-            }
+            exbList: [],
+            cnnvdList: [],
+            metasploitList: []
         }
     },
     components: {
-        DropDown
+        DropDown,
+        FilterModal,
+        ExbList,
+        CnnvdList,
+        MetaList
     },
     methods: {
+        ...mapActions([
+            'setType'
+        ]),
         currentChange(val) {
             this.currentPage = val
         },
         handleClick(id) {
             this.$router.push(`vuldetails/${id}`)
+            this.setType('cve')
         },
         handleSizeChange(val) {
             cveData(this.keyWord, '', val, 1).then(data => {
@@ -174,6 +161,47 @@ export default {
         },
         handleCurrentChange() {
 
+        },
+        vulType(val) {
+            this.type = val
+            console.log(val)
+            if (val === 'exb') {
+                exbData().then(data => {
+                    if (data && data.data) {
+                        let { dataList, total } = data.data
+                        this.exbList = dataList
+                        this.total = total
+                    } else {
+                        this.exbList = []
+                        this.total = null
+                    }
+                })
+            }
+            if (val === 'cnnvd') {
+                cnnvdData().then(data => {
+                    if (data && data.data) {
+                        let { dataList, total } = data.data
+                        this.cnnvdList = dataList
+                        this.total = total
+                    } else {
+                        this.cnnvdList = []
+                        this.total = null
+                    }
+                })
+            }
+            if (val === 'metasploit') {
+                metasploitData().then(data => {
+                    if (data && data.data) {
+                        let { dataList, total } = data.data
+                        this.metasploitList = dataList
+                        this.total = total
+                    } else {
+                        this.metasploitList = []
+                        this.total = null
+                    }
+                })
+            }
+        //
         },
         getvulList() {
             console.log(this.keyWord)
@@ -226,6 +254,7 @@ export default {
                 this.total = null
             }
         })
+
     }
 }
 </script>

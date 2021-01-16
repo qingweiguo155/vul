@@ -1,3 +1,4 @@
 export default {
-    dropdownList: state => state.dropdownList
+    dropdownList: state => state.dropdownList,
+    type: state => state.type
 }
