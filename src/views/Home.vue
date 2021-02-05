@@ -14,19 +14,7 @@
              </el-input>
            </div>
            <div class="filter-modal">
-             <el-button type="text" @click="dialogVisible = true">筛选</el-button>
-             <el-dialog
-               :title= "type + '筛选'"
-               :visible.sync="dialogVisible"
-               width="70%"
-             >
-               <filter-modal :type="type"/>
-               <span slot="footer" class="dialog-footer">
-                 <el-button @click="dialogVisible = false">取 消</el-button>
-                 <el-button @click="resetForm('ruleForm')">重置</el-button>
-                 <el-button type="primary" @click="filterVulList">确 定</el-button>
-               </span>
-             </el-dialog>
+              <filter-modal :type="type" @filterData="filterData"/>
            </div>
          </div>
           <div class="main_table" v-if="type === 'cve'">
@@ -86,7 +74,7 @@
           <div class="main_table" v-if="type === 'metasploit'">
             <meta-list :metasploitList="metasploitList"/>
           </div>
-          <div class="main-pagination">
+            <div class="main-pagination">
             <el-pagination
               background
               :current-page="currentPage"
@@ -121,7 +109,7 @@ export default {
             keyWord: '',
             currentPage: 1,
             total: null,
-            dialogVisible: false,
+
             type: 'cve',
             cveList: [],
             exbList: [],
@@ -134,7 +122,23 @@ export default {
         FilterModal,
         ExbList,
         CnnvdList,
-        MetaList
+        MetaList,
+    },
+    computed: {
+      // cveParams() {
+      //   return {
+      //     // asc,
+      //     cveId,
+      //     keyword,
+      //     orderBy: "",
+      //     vendor,
+      //     version,
+      //     product,
+      //     vulType,
+      //     cvssScoreStart:null,
+      //     cvssScoreEnd:null,
+      //   }
+      // }
     },
     methods: {
         ...mapActions([
@@ -142,13 +146,23 @@ export default {
         ]),
         currentChange(val) {
             this.currentPage = val
+            cveData(val).then(data => {
+                if (data && data.data) {
+                    let { dataList, total } = data.data
+                    this.cveList = dataList
+                    this.total = total
+                } else {
+                    this.cveList = []
+                    this.total = null
+                }
+            })
         },
         handleClick(id) {
             this.$router.push(`vuldetails/${id}`)
             this.setType('cve')
         },
         handleSizeChange(val) {
-            cveData(this.keyWord, '', val, 1).then(data => {
+            cveData(1, val).then(data => {
                 if (data && data.data) {
                     let { dataList, total } = data.data
                     this.cveList = dataList
@@ -171,6 +185,7 @@ export default {
                         let { dataList, total } = data.data
                         this.exbList = dataList
                         this.total = total
+                        this.openLoading().close()
                     } else {
                         this.exbList = []
                         this.total = null
@@ -183,6 +198,7 @@ export default {
                         let { dataList, total } = data.data
                         this.cnnvdList = dataList
                         this.total = total
+                        this.openLoading().close()
                     } else {
                         this.cnnvdList = []
                         this.total = null
@@ -195,6 +211,7 @@ export default {
                         let { dataList, total } = data.data
                         this.metasploitList = dataList
                         this.total = total
+                        this.openLoading().close()
                     } else {
                         this.metasploitList = []
                         this.total = null
@@ -207,20 +224,9 @@ export default {
             console.log(this.keyWord)
             // cveData(this.keyWord)
         },
-        resetForm(formName) {
-            this.$refs[formName].resetFields();
-        },
-        filterVulList() {
-            cveData(true,this.ruleForm.name,
-                this.keyWord,
-                '',
-                10,
-                1,
-                this.ruleForm.manufacturer,
-                this.ruleForm.version,
-                this.ruleForm.affectedProducts,
-                this.ruleForm.vulType,
-                ).then(data => {
+
+        filterData(val) {
+            cveData(1, this.currentPage,val).then(data => {
                 if (data && data.data) {
                     let { dataList, total } = data.data
                     this.cveList = dataList
@@ -230,8 +236,27 @@ export default {
                     this.total = null
                 }
             })
-            this.dialogVisible = false
         },
+        // filterVulList(type) {
+        //     console.log(this.ruleForm);
+        //     cveData(1,this.currentPage,
+        //         this.ruleForm.name,
+        //         this.ruleForm.manufacturer,
+        //         this.ruleForm.version,
+        //         this.ruleForm.affectedProducts,
+        //         this.ruleForm.vulType,
+        //         ).then(data => {
+        //         if (data && data.data) {
+        //             let { dataList, total } = data.data
+        //             this.cveList = dataList
+        //             this.total = total
+        //         } else {
+        //             this.cveList = []
+        //             this.total = null
+        //         }
+        //     })
+        //     this.dialogVisible = false
+        // },
         getCvssColorByScore(score) {
             switch (score) {
                 case score <= 2.5:
@@ -249,6 +274,7 @@ export default {
                 let { dataList, total } = data.data
                 this.cveList = dataList
                 this.total = total
+                this.openLoading().close()
             } else {
                 this.cveList = []
                 this.total = null

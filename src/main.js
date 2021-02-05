@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import './plugins/element.js'
+import './plugins/ele.js'
 import './plugins/vcharts.js'
 import echarts from 'echarts'
 import VueECharts from 'vue-echarts'
@@ -22,10 +22,15 @@ Vue.directive('highlight',function (el) {
         })
     }, 200)
 })
+
+
+
+
 // import vueHljs from "vue-hljs";
 // // import "vue-hljs/dist/vue-hljs.min.css";
 //  Vue.use(vueHljs);
 // Vue.component('v-chart', VueECharts)
+
 new Vue({
   router,
   store,

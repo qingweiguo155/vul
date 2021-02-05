@@ -1,22 +1,9 @@
 import request from '../utils/request'
-export function cveData(asc,cveId,keyword = '',orderBy, pageSize = 10, startPage = 1,vendor,version,product,vulType) {
+export function cveData(startPage = 1, pageSize = 10, ...params) {
     return request({
         url: '/exploitLib/cve/page',
         method: 'post',
-        params: {
-            asc,
-            cveId,
-            keyword,
-            orderBy: "",
-            pageSize,
-            startPage,
-            vendor,
-            version,
-            product,
-            vulType,
-            cvssScoreStart:null,
-            cvssScoreEnd:null,
-        }
+        params: Object.assign({startPage, pageSize}, ...params)
     })
 }
 
@@ -28,13 +15,14 @@ export function cveDetails(id) {
     })
 }
 
-export function exbData(pageSize = 10, startPage = 1) {
+export function exbData(startPage = 1, pageSize = 10, ...params) {
     return request({
         url: '/exploitLib/exb/page',
         method: 'post',
         params: {
             pageSize,
             startPage,
+            ...params
         }
     })
 }
@@ -63,13 +51,14 @@ export function exbDetails(id) {
     })
 }
 
-export function cnnvdData(pageSize = 10, startPage = 1) {
+export function cnnvdData(startPage = 1, pageSize = 10, ...params) {
     return request({
         url: '/exploitLib/cnnvd/page',
         method: 'post',
         params: {
             pageSize,
             startPage,
+            ...params
         }
     })
 }
@@ -90,13 +79,14 @@ export function cnnvdDetails(id) {
     })
 }
 
-export function metasploitData(pageSize = 10, startPage = 1) {
+export function metasploitData(startPage = 1, pageSize = 10, ...params) {
     return request({
         url: '/exploitLib/metasploit/page',
         method: 'post',
         params: {
             pageSize,
             startPage,
+            ...params
         }
     })
 }

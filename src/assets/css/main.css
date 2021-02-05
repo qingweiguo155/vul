@@ -1,0 +1,8 @@
+#icons {
+    display: none;
+    filter:url(#drop-shadow);
+}
+
+div.menuHolder{
+    margin: 0 auto;
+}

@@ -136,6 +136,7 @@
             </el-col>
         </el-row>
     </div>
+
     <div class="menu-tabs">
       <el-tabs v-model="activeName" type="card">
         <el-tab-pane label="知识图谱" name="first">
@@ -144,6 +145,10 @@
               <graph-node :id="$route.params.id"/>
           </el-card>
         </el-tab-pane>
+          <el-tab-pane label="SVG" name="two">
+              <!--"middle"类型, 动画引入animate.css库，白色遮罩，圆形自定义开关按钮，默认菜单颜色配置-->
+
+          </el-tab-pane>
         <el-tab-pane label="可利用脚本" name="fourth">
             <div v-highlight v-if="detailsObj.isFrame">
                 <pre>
@@ -166,13 +171,18 @@
 </template>
 
 <script>
+    /* eslint-disable */
     import { mapGetters } from 'vuex'
     // import 'highlight.js/styles/atom-one-dark.css' //样式文件
     // import 'highlight.js/styles/atelier-dune-light.css' //样式文件
     import { cveDetails,exbDetails,cnnvdDetails,metasploitDetailss } from '../api'
     // import GraphAll from './graph/GraphAll'
   // import D3Graph from './graph/D3'
-  import GraphNode from './graph/GraphNode'
+    import GraphNode from './graph/GraphNode'
+
+
+
+    // import SvgTemplate from './graph/svg'
 
   export default {
       name: 'About',
@@ -191,9 +201,8 @@
           ])
       },
       components: {
-          // GraphAll,
-          // D3Graph,
           GraphNode
+          // CircleMenu
       },
       methods: {
           // handleChangeCss(val) {
@@ -331,7 +340,7 @@
     height: 100%
     .box-info-details
       width: 100%
-      height: 40%
+      height: 30%
       .box-card
         min-height: 230px
         .base-info
