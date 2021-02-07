@@ -2,9 +2,26 @@
     <!--<div class="graph-node">-->
         <!--<v-chart :options="getOptions()" />-->
     <!--</div>-->
+
+
+
+
+
+
 <div>
+    <!--<el-dialog-->
+            <!--title="提示"-->
+            <!--:visible.sync="dialogVisible"-->
+            <!--width="30%"-->
+    <!--&gt;-->
+        <!--<span>这是一段信息</span>-->
+        <!--<span slot="footer" class="dialog-footer">-->
+        <!--<el-button @click="dialogVisible = false">取 消</el-button>-->
+        <!--<el-button type="primary" @click="dialogVisible = false">确 定</el-button>-->
+      <!--</span>-->
+    <!--</el-dialog>-->
     <div id="graphNode"></div>
-    <div style="height: 200px;margin-right: 50%;margin-top: 10%">
+    <div style="height: 200px;margin-right: 50%;margin-top: 10%" v-if="dialogVisible">
         <circle-menu type="middle-around" circle :number='4'>
             <button type="button" slot="item_btn"></button>
             <a slot="item_1" class="fa fa-twitter fa-lg"><i class="el-icon-grape" style="color: white"></i></a>
@@ -21,6 +38,7 @@
 
 <script>
     // import {cveKnowledge} from '../../api'
+
     import CircleMenu from 'vue-circle-menu'
     let data = {
         nodes: [{
@@ -145,7 +163,7 @@
     data() {
         // graphNode
         return {
-
+            dialogVisible: false
         }
     },
         props: ['id'],
@@ -209,6 +227,13 @@
                     links: data.links
                 }]
             }
+            graph.on("click", e => {
+                    //e中有当前节点信息
+                    // document.documentElement.oncontextmenu = () => {
+                    //     return false;
+                    // };
+                this.dialogVisible = true
+            })
             graph.setOption(option)
         }
     },
